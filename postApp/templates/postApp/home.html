@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500&family=Raleway:wght@400;500;700&display=swap"
+    rel="stylesheet" />
+  <title>Home | posts</title>
+</head>
+
+<body>
+  <div style="display: flex" class="wrapper">
+    <div class="left">
+      <div class="left__header">
+        <img src="{% static 'img/An_Post_logo.png' %}" alt="logo" />
+      </div>
+      <div class="left__content">
+        <div class="left__content__link">
+          <a href="#">All posts</a>
+        </div>
+        <div class="left__content__link">
+          <a href="{% url 'login' %}">Info</a>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="left__content__link">
+          <a href="{% url 'logout' %}">Log out</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="right">
+      <div class="right__header">
+        <p>All posts</p>
+      </div>
+
+      {% for post in posts %}
+      <div class="right__content">
+        <div class="right__title">
+          <div class="right__title__category">Категория: {{ post.category }}</div>
+          <div class="right__title__date">Дата: {{ post.date }}</div>
+          <div class="right__title__header">Заголовок: {{ post.header }}</div>
+        </div>
+        <div class="right__text">
+          <div style="display: flex; flex-direction: column;">
+            <div class="right__review">
+            <p>Описание:<br>{{ post.content }}</p>
+            </div>
+            {% if user.is_authenticated %}
+            <div class="right__admin">
+              <a href="{% url 'edit' pk=post.id %}">Изменить</a> <p style="color: brown; font-size: 28px; font-weight: 400; margin: 0 5px 0 5px;"> | </p>
+               <a href="{% url 'delete' pk=post.id %}">Удалить</a>
+            </div>
+            {% endif %}
+          </div>
+          
+        </div>
+      </div>
+      {% endfor %}
+      {% if user.is_authenticated %}
+      <div class="right__add">
+        <a href="{% url 'create' %}">Добавить пост</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</body>
+
+</html>
